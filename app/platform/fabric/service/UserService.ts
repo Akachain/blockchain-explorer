@@ -74,7 +74,7 @@ export class UserService {
 
 				const hashedPassword = bcrypt.hashSync(user.password, userEntry.salt);
 				if (userEntry.password === hashedPassword) {
-					return true;
+					return userEntry.viewchannel || 'all';
 				}
 
 				logger.error(`Incorrect credential : ${user.user} in ${user.network}`);
@@ -157,7 +157,8 @@ export class UserService {
 						firstName: user.firstname,
 						lastName: user.lastname,
 						email: user.email ? user.email : null,
-						roles: user.roles
+						roles: user.roles,
+						viewchannel: user.viewchannel
 					};
 
 					await this.userDataService

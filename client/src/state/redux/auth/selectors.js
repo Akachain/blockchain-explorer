@@ -4,6 +4,8 @@
 
 export const authSelector = state => state.auth.token;
 
+export const viewChannelSelector = state => state.auth.viewchannel;
+
 export const errorSelector = state => state.auth.error;
 
 export const networkSelector = state => state.auth.networks;

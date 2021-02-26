@@ -22,7 +22,7 @@ const login = ({ user, password }, networkObj) => dispatch =>
 		.then(resp => {
 			Auth.authenticateUser(resp.token);
 			dispatch(errorAction(null));
-			dispatch(loginAction({ user, ...resp }));
+			dispatch(loginAction({ user, ...resp, viewchannel: resp.user.data }));
 			return { status: 'Success' };
 		})
 		.catch(error => {

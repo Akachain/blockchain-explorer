@@ -60,8 +60,11 @@ export class App extends Component {
 
 	/* istanbul ignore next */
 	render() {
-		const { auth } = this.props;
+		const { auth, userViewChannel } = this.props;
 		const { loading } = this.state;
+		if (userViewChannel) {
+			localStorage.setItem('userViewChannel', userViewChannel);
+		}
 		if (auth && loading) {
 			return <LandingPage updateLoadStatus={this.updateLoadStatus} />;
 		}
@@ -90,7 +93,7 @@ export class App extends Component {
 const { modeSelector } = themeSelectors;
 const { changeTheme } = themeActions;
 const { errorMessageSelector } = chartSelectors;
-const { authSelector } = authSelectors;
+const { authSelector, viewChannelSelector } = authSelectors;
 
 /* istanbul ignore next */
 export default compose(
@@ -99,7 +102,8 @@ export default compose(
 		state => ({
 			error: errorMessageSelector(state),
 			mode: modeSelector(state),
-			auth: authSelector(state)
+			auth: authSelector(state),
+			userViewChannel: viewChannelSelector(state)
 		}),
 		{ changeTheme }
 	)

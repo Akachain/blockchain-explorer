@@ -44,6 +44,9 @@ export const attributes = {
 	},
 	salt: {
 		type: Sequelize.DataTypes.STRING
+	},
+	viewchannel: {
+		type: Sequelize.DataTypes.STRING
 	}
 };
 

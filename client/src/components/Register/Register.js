@@ -21,9 +21,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import { shape, string } from 'prop-types';
-import Container from '../Container'
+import Container from '../Container';
 
 import { authSelectors, authOperations } from '../../state/redux/auth';
+import { tableSelectors } from '../../state/redux/tables';
+
+const { channelsSelector } = tableSelectors;
 
 const styles = theme => ({
 	paper: {
@@ -104,6 +107,10 @@ export class Register extends Component {
 				error: null,
 				value: ''
 			},
+			viewchannel: {
+				error: null,
+				value: ''
+			},
 			rolesList: ['admin', 'user'],
 			error: '',
 			registered,
@@ -181,7 +188,8 @@ export class Register extends Component {
 			roles,
 			firstname,
 			lastname,
-			email
+			email,
+			viewchannel
 		} = this.state;
 
 		const userInfo = {
@@ -191,7 +199,8 @@ export class Register extends Component {
 			roles: roles.value,
 			firstname: firstname.value,
 			lastname: lastname.value,
-			email: email.value
+			email: email.value,
+			viewchannel: viewchannel.value
 		};
 
 		const info = await register(userInfo);
@@ -230,6 +239,10 @@ export class Register extends Component {
 			error: null,
 			value: ''
 		};
+		const viewchannel = {
+			error: null,
+			value: ''
+		};
 		this.setState({
 			user: user,
 			firstname: firstname,
@@ -237,7 +250,8 @@ export class Register extends Component {
 			email: email,
 			password: password,
 			password2: password2,
-			roles: roles
+			roles: roles,
+			viewchannel: viewchannel
 		});
 	}
 
@@ -248,6 +262,7 @@ export class Register extends Component {
 			password,
 			password2,
 			roles,
+			viewchannel,
 			firstname,
 			lastname,
 			email,
@@ -255,7 +270,16 @@ export class Register extends Component {
 			isLoading,
 			lastSaved
 		} = this.state;
-		const { classes, error, onClose } = this.props;
+		const { channels: channelArr, classes, error, onClose } = this.props;
+		const listChannels = [];
+		channelArr.forEach(channel => {
+			listChannels.push({
+				channelName: channel.channelname,
+				channelGenesisHash: channel.channel_genesis_hash
+			});
+		});
+		console.log(listChannels);
+
 		return (
 			<Container>
 				<Paper className={classes.paper}>
@@ -410,6 +434,33 @@ export class Register extends Component {
 								</FormHelperText>
 							)}
 						</FormControl>
+						<FormControl margin="normal" required fullWidth>
+							<TextField
+								required
+								fullWidth
+								select
+								error={!!roles.error}
+								id="viewchannel"
+								type="viewchannel"
+								name="viewchannel"
+								label="Select Channel"
+								disabled={isLoading}
+								value={viewchannel.value}
+								onChange={e => this.handleChange(e)}
+								margin="normal"
+							>
+								{listChannels.map(item => (
+									<MenuItem key={item.channelName} value={item.channelGenesisHash}>
+										{item.channelName}
+									</MenuItem>
+								))}
+							</TextField>
+							{viewchannel.error && (
+								<FormHelperText id="component-error-text" error>
+									{viewchannel.error}
+								</FormHelperText>
+							)}
+						</FormControl>
 						{error && (
 							<FormHelperText id="component-error-text" error>
 								{error}
@@ -463,7 +514,8 @@ export default compose(
 	connect(
 		state => ({
 			registered: registeredSelector(state),
-			error: errorSelector(state)
+			error: errorSelector(state),
+			channels: channelsSelector(state)
 		}),
 		{
 			register: authOperations.register,

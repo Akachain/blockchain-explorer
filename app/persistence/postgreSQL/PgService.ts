@@ -101,6 +101,16 @@ export class PgService {
 			`postgres://${this.pgconfig.user}:${this.pgconfig.password}@${this.pgconfig.host}:${this.pgconfig.port}/${this.pgconfig.database}`,
 			{ logging: false }
 		);
+
+		sequelize
+			.authenticate()
+			.then(() => {
+				logger.info('Connection has been established successfully.');
+			})
+			.catch(err => {
+				logger.error('Unable to connect to the database:', err);
+			});
+
 		this.userModel = sequelize.define('users', attributes, options);
 		return this.userModel;
 	}

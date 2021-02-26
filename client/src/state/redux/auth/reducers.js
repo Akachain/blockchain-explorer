@@ -7,6 +7,7 @@ import types from './types';
 const initialState = {
 	user: '',
 	token: null,
+	viewchannel: null,
 	error: '',
 	networks: [],
 	registered: '',
@@ -19,13 +20,12 @@ const authReducer = (state = initialState, action) => {
 		case types.LOGIN:
 		case types.ERROR:
 		case types.NETWORK:
-		case types.REGISTER:
-			{
-				return {
-					...state,
-					...action.payload
-				};
-			}
+		case types.REGISTER: {
+			return {
+				...state,
+				...action.payload
+			};
+		}
 		case types.USERLIST: {
 			return {
 				...state,

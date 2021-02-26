@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Logo from '../../static/images/Explorer_Logo.svg';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import { tableOperations } from '../../state/redux/tables';
-import { authOperations } from '../../state/redux/auth';
+import { authOperations, authSelectors } from '../../state/redux/auth';
 import {
 	currentChannelType,
 	getBlockListType,
@@ -55,6 +55,7 @@ const {
 const { userlist } = authOperations;
 
 const { currentChannelSelector } = chartSelectors;
+const { viewChannelSelector } = authSelectors;
 
 const styles = theme => {
 	const { type } = theme.palette;
@@ -127,26 +128,28 @@ export class LandingPage extends Component {
 		} = this.props;
 		await getChannel();
 		const { currentChannel } = this.props;
+		const userChannel = localStorage.getItem('userViewChannel');
+		const curChannel = userChannel !== 'all' ? userChannel : currentChannel;
 
 		const promiseTimeout = setTimeout(() => {
 			this.setState({ hasDbError: true });
 		}, 60000);
 
 		await Promise.all([
-			getBlockList(currentChannel),
-			getBlocksPerHour(currentChannel),
-			getBlocksPerMin(currentChannel),
-			getChaincodeList(currentChannel),
-			getChannelList(currentChannel),
+			getBlockList(curChannel),
+			getBlocksPerHour(curChannel),
+			getBlocksPerMin(curChannel),
+			getChaincodeList(curChannel),
+			getChannelList(curChannel),
 			getChannels(),
-			getDashStats(currentChannel),
-			getPeerList(currentChannel),
-			getPeerStatus(currentChannel),
-			getBlockActivity(currentChannel),
-			getTransactionByOrg(currentChannel),
-			getTransactionList(currentChannel),
-			getTransactionPerHour(currentChannel),
-			getTransactionPerMin(currentChannel),
+			getDashStats(curChannel),
+			getPeerList(curChannel),
+			getPeerStatus(curChannel),
+			getBlockActivity(curChannel),
+			getTransactionByOrg(curChannel),
+			getTransactionList(curChannel),
+			getTransactionPerHour(curChannel),
+			getTransactionPerMin(curChannel),
 			userlistData()
 		]);
 		clearTimeout(promiseTimeout);
@@ -221,7 +224,8 @@ export default compose(
 	withStyles(styles),
 	connect(
 		state => ({
-			currentChannel: currentChannelSelector(state)
+			currentChannel: currentChannelSelector(state),
+			userViewChannel: viewChannelSelector(state)
 		}),
 		{
 			getBlockList: blockList,

@@ -46,7 +46,8 @@ export const localLoginStrategy = function(platform) {
 			});
 			const data = {
 				message: 'logged in',
-				name: userData.user
+				name: userData.user,
+				data: authResult
 			};
 			return done(null, token, data);
 		}
