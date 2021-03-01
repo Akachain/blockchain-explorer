@@ -4,6 +4,11 @@
 
 import types from './types';
 
+const userInfo = userInfo => ({
+  type: types.USER_INFO,
+  payload: { userInfo },
+});
+
 const getBlockPerHour = blockPerHour => ({
   type: types.BLOCK_CHART_HOUR,
   payload: { blockPerHour },
@@ -67,6 +72,7 @@ const updateChannel = channel => ({
 });
 
 export default {
+  userInfo,
   getBlockPerHour,
   getBlockPerMin,
   getChannel,

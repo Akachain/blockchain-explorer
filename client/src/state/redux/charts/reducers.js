@@ -8,6 +8,16 @@ import types from './types';
 /* Reducers for Dashboard Charts */
 const initialState = {};
 
+const userInfoReducer = (state = initialState, action = {}) => {
+  if (action.type === types.USER_INFO) {
+    return {
+      roles: action.payload.userInfo.roles
+    };
+  } else {
+    return state;
+  }
+};
+
 const blockPerHourReducer = (state = initialState, action = {}) => {
   if (action.type === types.BLOCK_CHART_HOUR) {
     return {
@@ -136,6 +146,7 @@ const transactionPerMinReducer = (state = initialState, action = {}) => {
 };
 
 const reducer = combineReducers({
+  userInfo: userInfoReducer,
   blockPerHour: blockPerHourReducer,
   blockPerMin: blockPerMinReducer,
   channel: channelReducer,

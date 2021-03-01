@@ -76,12 +76,20 @@ export class Proxy {
 	 * @returns
 	 * @memberof Proxy
 	 */
-	async getCurrentChannel(network_id) {
+	async getCurrentChannel(req) {
+		const network_id = req.network;
 		logger.debug('getCurrentChannel: network_id', network_id);
 
 		const client = await this.platform.getClient(network_id);
-		const channel_name = Object.keys(client.fabricGateway.config.channels)[0];
-		const channel_genesis_hash = client.getChannelGenHash(channel_name);
+
+		const user = await this.userService.getUser(req);
+		let channel_genesis_hash = '';
+		if (user && user.viewchannel) {
+			channel_genesis_hash = user.viewchannel;
+		} else {
+			const channel_name = Object.keys(client.fabricGateway.config.channels)[0];
+			channel_genesis_hash = client.getChannelGenHash(channel_name);
+		}
 		let respose;
 		if (channel_genesis_hash) {
 			respose = {
@@ -96,6 +104,25 @@ export class Proxy {
 		}
 		logger.debug('getCurrentChannel >> %j', respose);
 		return respose;
+	}
+
+	/**
+	 *
+	 *
+	 * @returns
+	 * @memberof Proxy
+	 */
+	async getUserInfo(req) {
+		const user = await this.userService.getUser(req);
+		const resp = (user) ? {
+			username: user.username,
+			roles: user.roles
+		} : {
+			status: false,
+			message: 'Failed to get user'
+		};
+		logger.debug('user >> %s', resp);
+		return resp;
 	}
 
 	/**

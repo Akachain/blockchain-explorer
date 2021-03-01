@@ -162,7 +162,18 @@ export async function platformroutes(
 	 * curl -i 'http://<host>:<port>/curChannel'
 	 */
 	router.get('/curChannel', (req, res) => {
-		proxy.getCurrentChannel(req.network).then((data: any) => {
+		proxy.getCurrentChannel(req).then((data: any) => {
+			res.send(data);
+		});
+	});
+
+	/**
+	 * Return current user info
+	 * GET /userInfo
+	 * curl -i 'http://<host>:<port>/userInfo'
+	 */
+	router.get('/userInfo', (req, res) => {
+		proxy.getUserInfo(req).then((data: any) => {
 			res.send(data);
 		});
 	});

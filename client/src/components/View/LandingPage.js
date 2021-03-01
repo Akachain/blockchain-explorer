@@ -31,6 +31,7 @@ import {
 } from '../types';
 
 const {
+	userInfo,
 	blockPerHour,
 	blockPerMin,
 	blockActivity,
@@ -55,7 +56,6 @@ const {
 const { userlist } = authOperations;
 
 const { currentChannelSelector } = chartSelectors;
-const { viewChannelSelector } = authSelectors;
 
 const styles = theme => {
 	const { type } = theme.palette;
@@ -107,6 +107,7 @@ export class LandingPage extends Component {
 
 	async componentDidMount() {
 		const {
+			getUserInfo,
 			getBlockList,
 			getBlocksPerHour,
 			getBlocksPerMin,
@@ -126,30 +127,29 @@ export class LandingPage extends Component {
 			userlist: userlistData
 			// getUserList
 		} = this.props;
+		await getUserInfo();
 		await getChannel();
 		const { currentChannel } = this.props;
-		const userChannel = localStorage.getItem('userViewChannel');
-		const curChannel = userChannel !== 'all' ? userChannel : currentChannel;
 
 		const promiseTimeout = setTimeout(() => {
 			this.setState({ hasDbError: true });
 		}, 60000);
 
 		await Promise.all([
-			getBlockList(curChannel),
-			getBlocksPerHour(curChannel),
-			getBlocksPerMin(curChannel),
-			getChaincodeList(curChannel),
-			getChannelList(curChannel),
+			getBlockList(currentChannel),
+			getBlocksPerHour(currentChannel),
+			getBlocksPerMin(currentChannel),
+			getChaincodeList(currentChannel),
+			getChannelList(currentChannel),
 			getChannels(),
-			getDashStats(curChannel),
-			getPeerList(curChannel),
-			getPeerStatus(curChannel),
-			getBlockActivity(curChannel),
-			getTransactionByOrg(curChannel),
-			getTransactionList(curChannel),
-			getTransactionPerHour(curChannel),
-			getTransactionPerMin(curChannel),
+			getDashStats(currentChannel),
+			getPeerList(currentChannel),
+			getPeerStatus(currentChannel),
+			getBlockActivity(currentChannel),
+			getTransactionByOrg(currentChannel),
+			getTransactionList(currentChannel),
+			getTransactionPerHour(currentChannel),
+			getTransactionPerMin(currentChannel),
 			userlistData()
 		]);
 		clearTimeout(promiseTimeout);
@@ -224,10 +224,10 @@ export default compose(
 	withStyles(styles),
 	connect(
 		state => ({
-			currentChannel: currentChannelSelector(state),
-			userViewChannel: viewChannelSelector(state)
+			currentChannel: currentChannelSelector(state)
 		}),
 		{
+			getUserInfo: userInfo,
 			getBlockList: blockList,
 			getBlocksPerHour: blockPerHour,
 			getBlocksPerMin: blockPerMin,

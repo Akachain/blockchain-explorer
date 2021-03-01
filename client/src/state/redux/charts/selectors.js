@@ -2,6 +2,7 @@
  *    SPDX-License-Identifier: Apache-2.0
  */
 
+export const userRolesSelector = state => state.charts.userInfo.roles;
 export const blockPerHourSelector = state => state.charts.blockPerHour.rows;
 export const blockPerMinSelector = state => state.charts.blockPerMin.rows;
 export const channelListSelector = state => state.charts.channelList.list;

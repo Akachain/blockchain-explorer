@@ -3,6 +3,9 @@
  */
 
 const namespaces = 'charts';
+/* user Charts */
+const USER_INFO = `${namespaces}/USER_INFO`;
+
 /* Analytics Charts */
 const BLOCK_CHART_MIN = `${namespaces}/BLOCK_CHART_MIN`;
 const BLOCK_CHART_HOUR = `${namespaces}/BLOCK_CHART_HOUR`;
@@ -30,6 +33,7 @@ const ERROR_MESSAGE = 'ERROR_MESSAGE';
 const BLOCK_ACTIVITY = `${namespaces}/BLOCK_ACTIVITY`;
 
 export default {
+  USER_INFO,
   BLOCK_CHART_HOUR,
   BLOCK_CHART_MIN,
   CHANGE_CHANNEL,

@@ -67,7 +67,7 @@ const {
 	transactionList
 } = tableOperations;
 
-const { currentChannelSelector } = chartSelectors;
+const { currentChannelSelector, userRolesSelector } = chartSelectors;
 const { channelsSelector } = tableSelectors;
 /* istanbul ignore next */
 const styles = theme => {
@@ -476,16 +476,17 @@ export class HeaderView extends Component {
 			registerOpen,
 			notifications
 		} = this.state;
-		const role = localStorage.getItem('role');
-		const isAdmin = role === 'admin' ? true : false;
+		const isAdmin = this.props.userRoles === 'admin' ? true : false;
 		const links = [
 			{ to: '/', label: 'DASHBOARD', exact: true },
 			{ to: '/network', label: 'NETWORK' },
 			{ to: '/blocks', label: 'BLOCKS' },
 			{ to: '/transactions', label: 'TRANSACTIONS' },
-			{ to: '/chaincodes', label: 'CHAINCODES' },
-			{ to: '/channels', label: 'CHANNELS' }
+			{ to: '/chaincodes', label: 'CHAINCODES' }
 		];
+		const adminLinks = [
+			{ to: '/channels', label: 'CHANNELS' }
+		]
 
 		return (
 			<div>
@@ -513,6 +514,19 @@ export class HeaderView extends Component {
 									onMouseLeave={this.closeToggle}
 								>
 									{links.map(({ to, label, ...props }) => (
+										<li key={to}>
+											<NavLink
+												to={to}
+												className={classes.tab}
+												activeClassName={classes.activeTab}
+												onClick={this.toggle}
+												{...props}
+											>
+												{label}
+											</NavLink>
+										</li>
+									))}
+									{isAdmin && adminLinks.map(({ to, label, ...props }) => (
 										<li key={to}>
 											<NavLink
 												to={to}
@@ -651,7 +665,8 @@ export default compose(
 		state => ({
 			currentChannel: currentChannelSelector(state),
 			channels: channelsSelector(state),
-			mode: modeSelector(state)
+			mode: modeSelector(state),
+			userRoles: userRolesSelector(state)
 		}),
 		{
 			getBlockList: blockList,

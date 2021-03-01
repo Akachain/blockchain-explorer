@@ -6,6 +6,26 @@ import actions from './actions';
 import { get } from '../../../services/request';
 
 /* istanbul ignore next */
+const userInfo = () => dispatch =>
+	get(`/api/userInfo`)
+		.then(resp => {
+			if (resp.status === 500) {
+				dispatch(
+					actions.getErroMessage(
+						'500 Internal Server Error: The server has encountered an internal error and unable to complete your request'
+					)
+				);
+			} else if (resp.status === 400) {
+				dispatch(actions.getErroMessage(resp.error));
+			} else {
+				dispatch(actions.userInfo(resp));
+			}
+		})
+		.catch(error => {
+			console.error(error);
+		});
+
+/* istanbul ignore next */
 const blockPerHour = channelName => dispatch =>
 	get(`/api/blocksByHour/${channelName}/1`)
 		.then(resp => {
@@ -71,7 +91,7 @@ const channel = () => dispatch =>
 		.then(resp => {
 			if (resp.status === 500) {
 				dispatch(
-					actions.getErroMessage(
+					actions.getErrorespMessage(
 						'500 Internal Server Error: The server has encountered an internal error and unable to complete your request'
 					)
 				);
@@ -232,6 +252,7 @@ const transactionPerMin = channelName => dispatch =>
 		});
 
 export default {
+	userInfo,
 	blockPerHour,
 	blockPerMin,
 	transactionPerHour,

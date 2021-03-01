@@ -131,6 +131,19 @@ export class UserService {
 	/**
 	 *
 	 *
+	 * @param {User} userObj
+	 * @returns {object} Return user
+	 * @memberof UserService
+	 */
+	getUser(userObj) {
+		logger.info('getUser:', userObj);
+		return this.userDataService
+			.findUser(userObj.requestUserId, userObj.network);
+	}
+
+	/**
+	 *
+	 *
 	 * @param {*} user
 	 * @returns
 	 * @memberof UserService
