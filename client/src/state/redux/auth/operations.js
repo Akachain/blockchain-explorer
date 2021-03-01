@@ -20,7 +20,7 @@ import Auth from '../../Auth';
 const login = ({ user, password }, networkObj) => dispatch =>
 	post('/auth/login', { user, password, network: networkObj })
 		.then(resp => {
-			Auth.authenticateUser(resp.token);
+			Auth.authenticateUser(resp);
 			dispatch(errorAction(null));
 			dispatch(loginAction({ user, ...resp, viewchannel: resp.user.data }));
 			return { status: 'Success' };

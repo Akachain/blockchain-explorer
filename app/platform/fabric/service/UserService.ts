@@ -74,7 +74,10 @@ export class UserService {
 
 				const hashedPassword = bcrypt.hashSync(user.password, userEntry.salt);
 				if (userEntry.password === hashedPassword) {
-					return userEntry.viewchannel || 'all';
+					return {
+						viewchannel: userEntry.viewchannel || 'all',
+						role: userEntry.roles || 'user'
+					};
 				}
 
 				logger.error(`Incorrect credential : ${user.user} in ${user.network}`);

@@ -226,7 +226,7 @@ export class HeaderView extends Component {
 	}
 
 	componentDidMount() {
-		const { channels: channelArr , currentChannel } = this.props;
+		const { channels: channelArr, currentChannel } = this.props;
 		const arr = [];
 		let selectedValue = {};
 		channelArr.forEach(element => {
@@ -476,6 +476,8 @@ export class HeaderView extends Component {
 			registerOpen,
 			notifications
 		} = this.state;
+		const role = localStorage.getItem('role');
+		const isAdmin = role === 'admin' ? true : false;
 		const links = [
 			{ to: '/', label: 'DASHBOARD', exact: true },
 			{ to: '/network', label: 'NETWORK' },
@@ -524,29 +526,20 @@ export class HeaderView extends Component {
 										</li>
 									))}
 									<div className={classes.adminButton}>
-										<Select
-											className={classes.channel}
-											placeholder="Select Channel..."
-											required
-											name="form-field-name"
-											isLoading={isLoading}
-											value={selectedChannel}
-											onChange={this.handleChange}
-											onFocus={this.reloadChannels.bind(this)}
-											options={stateChannels}
-										/>
-									</div>
-									{
-										<div className={classes.adminButton}>
-											<FontAwesome
-												name="bell"
-												data-command="bell"
-												className={classes.bell}
-												onClick={() => this.handleDrawOpen('notifyDrawer')}
+										{isAdmin && (
+											<Select
+												className={classes.channel}
+												placeholder="Select Channel..."
+												required
+												name="form-field-name"
+												isLoading={isLoading}
+												value={selectedChannel}
+												onChange={this.handleChange}
+												onFocus={this.reloadChannels.bind(this)}
+												options={stateChannels}
 											/>
-											<Badge badgeContent={notifyCount} color="primary" />
-										</div>
-									}
+										)}
+									</div>
 									{/*
               //Use when Admin functionality is required
               <div className={classes.adminButton}>

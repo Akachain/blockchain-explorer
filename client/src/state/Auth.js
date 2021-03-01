@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 export default class Auth {
 	/**
-	 * Authenticate a user. Save a token string in Local Storage
+	 * Authenticate a user. Save a token, view channel, role string in Local Storage
 	 *
-	 * @param {string} token
+	 * @param {string} resp
 	 */
-	static authenticateUser(token) {
-		localStorage.setItem('token', token);
+	static authenticateUser(res) {
+		localStorage.setItem('token', res.token);
+		localStorage.setItem('userViewChannel', res.user.data.viewchannel);
+		localStorage.setItem('role', res.user.data.role);
 	}
 
 	/**
@@ -19,11 +21,13 @@ export default class Auth {
 	}
 
 	/**
-	 * Deauthenticate a user. Remove a token from Local Storage.
+	 * Deauthenticate a user. Remove a token, view channel, role from Local Storage.
 	 *
 	 */
 	static deauthenticateUser() {
 		localStorage.removeItem('token');
+		localStorage.removeItem('userViewChannel');
+		localStorage.removeItem('role');
 	}
 
 	/**
