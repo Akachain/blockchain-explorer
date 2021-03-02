@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Logo from '../../static/images/Explorer_Logo.svg';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import { tableOperations } from '../../state/redux/tables';
-import { authOperations, authSelectors } from '../../state/redux/auth';
+import { authOperations } from '../../state/redux/auth';
 import {
 	currentChannelType,
 	getBlockListType,
